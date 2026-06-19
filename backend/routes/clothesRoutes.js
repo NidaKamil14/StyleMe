@@ -50,4 +50,48 @@ router.post("/", (req, res) => {
   );
 });
 
+// UPDATE clothing item
+router.put("/:id", (req, res) => {
+  const { item_name, category, color, occasion, image_url } = req.body;
+
+  const sql = `
+    UPDATE clothes
+    SET item_name = ?, category = ?, color = ?, occasion = ?, image_url = ?
+    WHERE cloth_id = ?
+  `;
+
+  //Put operation
+  db.query(
+    sql,
+    [item_name, category, color, occasion, image_url, req.params.id],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({ error: "Database Error" });
+      }
+
+      res.json({
+        message: "Clothing item updated successfully"
+      });
+    }
+  );
+});
+
+//Delete operation
+// DELETE clothing item
+router.delete("/:id", (req, res) => {
+  const sql = "DELETE FROM clothes WHERE cloth_id = ?";
+
+  db.query(sql, [req.params.id], (err, result) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({ error: "Database Error" });
+    }
+
+    res.json({
+      message: "Clothing item deleted successfully"
+    });
+  });
+});
+
 module.exports = router;
