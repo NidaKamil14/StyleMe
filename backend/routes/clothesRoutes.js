@@ -3,7 +3,10 @@ const router = express.Router();
 const db = require("../config/db");
 
 // GET all clothes
+// GET all clothes
 router.get("/", (req, res) => {
+  console.log("GET /api/clothes hit");
+
   const sql = "SELECT * FROM clothes";
 
   db.query(sql, (err, result) => {
@@ -11,6 +14,8 @@ router.get("/", (req, res) => {
       console.log(err);
       return res.status(500).json({ error: "Database Error" });
     }
+
+    console.log("Query successful");
 
     res.json(result);
   });
