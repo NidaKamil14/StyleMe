@@ -1,3 +1,6 @@
+import axios from "axios";
+import closedWardrobe from "./assets/images/closed-wardrobe.png";
+import openWardrobe from "./assets/images/open-wardrobe.png";
 import "./App.css";
 import { useEffect, useState } from "react";
 
@@ -9,6 +12,7 @@ import dressImg from "./assets/images/5.png";
 import ethnicwearImg from "./assets/images/6.png";
 
 function App() {
+  const [isWardrobeOpen, setIsWardrobeOpen] = useState(false);
   const [clothes, setClothes] = useState([]);
   const [activePage, setActivePage] = useState("home");
   const [searchTerm, setSearchTerm] = useState("");
@@ -24,6 +28,7 @@ const [color, setColor] = useState("");
 const [occasion, setOccasion] = useState("");
 const [favorites, setFavorites] = useState([]);
 const [editingId, setEditingId] = useState(null);
+const [selectedClosetCategory, setSelectedClosetCategory] = useState(null);
 
   useEffect(() => {
     fetch("http://localhost:5001/api/clothes")
@@ -228,23 +233,54 @@ const deleteClothing = async (id) => {
   }
 };
 
-const toggleFavorite = (id) => {
-  if (favorites.includes(id)) {
-    setFavorites(
-      favorites.filter((favId) => favId !== id)
+const toggleFavorite = async (id) => {
+  try {
+    const item = clothes.find(
+      (cloth) => cloth.cloth_id === id
     );
-  } else {
-    setFavorites([...favorites, id]);
+
+    const newFavoriteValue =
+      item.is_favorite ? 0 : 1;
+
+    await axios.put(
+  `http://localhost:5001/api/clothes/${id}/favorite`,
+      {
+        is_favorite: newFavoriteValue,
+      }
+    );
+
+    setClothes(
+      clothes.map((cloth) =>
+        cloth.cloth_id === id
+          ? {
+              ...cloth,
+              is_favorite: newFavoriteValue,
+            }
+          : cloth
+      )
+    );
+  } catch (error) {
+    console.log(error);
   }
 };
-
-const favoriteItems = clothes.filter((item) =>
-  favorites.includes(item.cloth_id)
-);
 
 useEffect(() => {
   console.log("Editing ID:", editingId);
 }, [editingId]);
+
+const getCategoryCount = (category) => {
+  return clothes.filter(
+    (item) => item.category === category
+  ).length;
+};
+
+const closetItems = clothes.filter(
+  (item) => item.category === selectedClosetCategory
+);
+
+const favoriteItems = clothes.filter(
+  (item) => item.is_favorite
+);
 
   return (
   <div className="layout">
@@ -279,9 +315,14 @@ useEffect(() => {
     Outfits
   </div>
 
-  <div className="menu-item">
-    Favorites
-  </div>
+ <div
+  className={`menu-item ${
+    activePage === "favorites" ? "active" : ""
+  }`}
+  onClick={() => setActivePage("favorites")}
+>
+  Favorites
+</div>
 
   <div className="menu-item">
     Settings
@@ -292,6 +333,32 @@ useEffect(() => {
     </aside>
 
    <main className="content">
+
+  {activePage === "favorites" && (
+  <>
+    <h2>My Favorites</h2>
+
+    <div className="clothes-grid">
+  {favoriteItems.map((item) => (
+    <div
+      className="clothes-card"
+      key={item.cloth_id}
+    >
+      <div className="clothes-circle">
+        <img
+          src={getCategoryImage(item.category)}
+          alt={item.category}
+          className="clothing-image"
+        />
+      </div>
+
+      <h3>{item.item_name}</h3>
+      <p>{item.category}</p>
+    </div>
+  ))}
+</div>
+  </>
+)}
 
   {activePage === "home" && (
     <>
@@ -397,24 +464,133 @@ useEffect(() => {
 
   <div className="favorites-preview">
 
-    <h2>Favorite Pieces</h2>
+  <h2>Favorite Pieces</h2>
 
-    {favoriteItems.length > 0 ? (
-      favoriteItems.map((item) => (
-    <div
-      key={item.cloth_id}
-      className="favorite-item"
+  {favoriteItems.length > 0 ? (
+    favoriteItems.map((item) => (
+      <div
+        key={item.cloth_id}
+        className="favorite-item"
       >
         <span>💖</span> {item.item_name}
-    </div>
-  ))
-) : (
-  <p>
-    Save your most loved outfits here.
-  </p>
+      </div>
+    ))
+  ) : (
+    <p>
+      Save your most loved outfits here.
+    </p>
+  )}
+
+</div>
+
+<div
+  className="wardrobe-section"
+  style={{
+    position: "relative",
+    textAlign: "center"
+  }}
+>
+  <h2 style={{ textAlign: "center" }}>
+  ✨ Explore My Closet
+</h2>
+
+  <img
+    src={isWardrobeOpen ? openWardrobe : closedWardrobe}
+    alt="Wardrobe"
+    onClick={() => {
+  setIsWardrobeOpen(!isWardrobeOpen);
+
+  if (isWardrobeOpen) {
+    setSelectedClosetCategory(null);
+  }
+}}
+    style={{
+  cursor: "pointer",
+  width: "900px",
+  display: "block",
+  margin: "0 auto"
+}}
+  />
+  {isWardrobeOpen && (
+  <div
+    className="wardrobe-categories"
+    style={{
+      position: "absolute",
+      top: "200px",
+      left: "50%",
+      transform: "translateX(-50%)",
+      width: "260px",
+      display: "grid",
+gridTemplateColumns: "1fr 1fr",
+gap: "6px"
+    }}
+    
+  >
+    <button
+      className="closet-btn"
+      onClick={() => setSelectedClosetCategory("Topwear")} >
+      👚 Topwear ({getCategoryCount("Topwear")})
+    </button>
+
+    <button
+      className="closet-btn"
+      onClick={() => setSelectedClosetCategory("Bottomwear")} >
+      👖 Bottomwear ({getCategoryCount("Bottomwear")})
+    </button>
+    <button
+      className="closet-btn"
+      onClick={() => setSelectedClosetCategory("Dress")} >
+      👗 Dress ({getCategoryCount("Dress")})
+    </button>
+    <button
+      className="closet-btn"
+      onClick={() => setSelectedClosetCategory("Ethnic Wear")} >
+      🩷 Ethnic Wear  ({getCategoryCount("Ethnic Wear")})
+    </button>
+    <button
+      className="closet-btn"
+      onClick={() => setSelectedClosetCategory("Footwear")} >
+      👟 Footwear  ({getCategoryCount("Footwear")})
+    </button>
+    <button
+      className="closet-btn"
+      onClick={() => setSelectedClosetCategory("Accessory")} >
+      👜 Accessories ({getCategoryCount("Accessory")})
+    </button>
+    <button
+      className="closet-btn"
+      onClick={() => setSelectedClosetCategory("Outerwear")} >
+      🧥 Outerwear ({getCategoryCount("Outerwear")})
+    </button>
+    <button
+      className="closet-btn"
+      onClick={() => setSelectedClosetCategory("Other")} >
+      ✨ Other ({getCategoryCount("Other")})
+    </button>
+  </div>
 )}
 
+{selectedClosetCategory && (
+  <div className="closet-items-card">
+    <h3>{selectedClosetCategory}</h3>
+
+    {closetItems.length === 0 ? (
+      <p className="no-items-message">
+        No items found in this category.
+      </p>
+    ) : (
+      closetItems.map((item) => (
+        <div
+          key={item.cloth_id}
+          className="closet-item-card"
+        >
+          {item.item_name}
+        </div>
+      ))
+    )}
   </div>
+)}
+</div>
 
 </>
 
@@ -533,7 +709,7 @@ useEffect(() => {
         className="favorite-btn"
         onClick={() => toggleFavorite(item.cloth_id)}
       >
-        { favorites.includes(item.cloth_id) ? "♥" : "♡" }
+        {item.is_favorite ? "♥" : "♡"}
       </button>
 
            <div className="clothes-circle">

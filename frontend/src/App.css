@@ -660,3 +660,72 @@ body::after {
 
   background: #ffd6e8;
 }
+.closet-btn {
+  width: 120px;
+  padding: 6px 8px;
+
+  background: #ffd6e7;
+  color: #d63384;
+
+  border: 2px solid #ffb6d5;
+  border-radius: 12px;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.3s ease;
+}
+
+.closet-btn:hover {
+  background: #ffc2dd;
+  transform: scale(1.03);
+}
+
+.closet-btn:hover {
+  transform: scale(1.05);
+  background: #ffe4ef;
+}
+.closet-items-card {
+  max-width: 700px;
+  margin: 30px auto;
+  padding: 25px;
+
+  background: #ffeaf4;
+
+  border-radius: 20px;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.closet-items-card h3 {
+  width: 100%;
+  text-align: center;
+  color: #d63384;
+  margin-bottom: 20px;
+}
+
+.closet-item-card {
+  background: white;
+
+  padding: 8px 12px;
+
+  border-radius: 12px;
+
+  font-weight: 500;
+
+  width: 140px;
+  text-align: center;
+}
+.no-items-message {
+  text-align: center;
+  font-size: 16px;
+  color: #666;
+  padding: 20px;
+}
