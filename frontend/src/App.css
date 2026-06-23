@@ -729,3 +729,35 @@ body::after {
   color: #666;
   padding: 20px;
 }
+
+.styling-note-input {
+  width: 100%;
+  min-height: 70px;
+  margin-top: 10px;
+  padding: 10px;
+  border: 2px solid #ffd6e7;
+  border-radius: 12px;
+  background: #fff8fc;
+  font-size: 14px;
+  resize: none;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.styling-note-input:focus {
+  border-color: #ff9ec4;
+}
+
+.save-note-btn {
+  margin-top: 8px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 10px;
+  background: #ffd6e7;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.save-note-btn:hover {
+  transform: scale(1.03);
+}

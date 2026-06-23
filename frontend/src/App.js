@@ -26,9 +26,10 @@ const [itemName, setItemName] = useState("");
 const [category, setCategory] = useState("");
 const [color, setColor] = useState("");
 const [occasion, setOccasion] = useState("");
-const [favorites, setFavorites] = useState([]);
 const [editingId, setEditingId] = useState(null);
 const [selectedClosetCategory, setSelectedClosetCategory] = useState(null);
+const [stylingNote, setStylingNote] = useState("");
+const [currentNote, setCurrentNote] = useState("");
 
   useEffect(() => {
     fetch("http://localhost:5001/api/clothes")
@@ -282,6 +283,24 @@ const favoriteItems = clothes.filter(
   (item) => item.is_favorite
 );
 
+const saveStylingNote = async (
+  clothId,
+  stylingNote
+) => {
+  try {
+    await axios.put(
+      `http://localhost:5001/api/clothes/${clothId}/note`,
+      {
+        styling_note: stylingNote,
+      }
+    );
+
+    console.log("Note saved!");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
   return (
   <div className="layout">
 
@@ -354,6 +373,25 @@ const favoriteItems = clothes.filter(
 
       <h3>{item.item_name}</h3>
       <p>{item.category}</p>
+      <textarea
+      className="styling-note-input"
+      placeholder="Add a styling note..."
+      defaultValue={item.styling_note || ""}
+      onChange={(e) =>
+        setCurrentNote(e.target.value)
+      }
+/>
+      <button
+        className="save-note-btn"
+        onClick={() =>
+          saveStylingNote(
+            item.cloth_id,
+            currentNote
+          ) 
+        }
+      >
+        Save Note
+      </button>
     </div>
   ))}
 </div>

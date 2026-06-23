@@ -24,23 +24,24 @@ router.get("/", (req, res) => {
 // POST new clothing item
 router.post("/", (req, res) => {
   const {
-    user_id,
-    item_name,
-    category,
-    color,
-    occasion,
-    image_url
-  } = req.body;
+  user_id,
+  item_name,
+  category,
+  color,
+  occasion,
+  image_url,
+  styling_note
+} = req.body;
 
   const sql = `
     INSERT INTO clothes
-    (user_id, item_name, category, color, occasion, image_url)
-    VALUES (?, ?, ?, ?, ?, ?)
+(user_id, item_name, category, color, occasion, image_url, styling_note)
+VALUES (?, ?, ?, ?, ?, ?, ?)
   `;
 
   db.query(
     sql,
-    [user_id, item_name, category, color, occasion, image_url],
+    [user_id, item_name, category, color, occasion, image_url, styling_note],
     (err, result) => {
       if (err) {
         console.log(err);
@@ -77,6 +78,58 @@ router.put("/:id", (req, res) => {
 
       res.json({
         message: "Clothing item updated successfully"
+      });
+    }
+  );
+});
+
+// TOGGLE FAVORITE
+router.put("/:id/favorite", (req, res) => {
+  const { is_favorite } = req.body;
+
+  const sql = `
+    UPDATE clothes
+    SET is_favorite = ?
+    WHERE cloth_id = ?
+  `;
+
+  db.query(
+    sql,
+    [is_favorite, req.params.id],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({ error: "Database Error" });
+      }
+
+      res.json({
+        message: "Favorite updated successfully"
+      });
+    }
+  );
+});
+
+// UPDATE STYLING NOTE
+router.put("/:id/note", (req, res) => {
+  const { styling_note } = req.body;
+
+  const sql = `
+    UPDATE clothes
+    SET styling_note = ?
+    WHERE cloth_id = ?
+  `;
+
+  db.query(
+    sql,
+    [styling_note, req.params.id],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({ error: "Database Error" });
+      }
+
+      res.json({
+        message: "Styling note updated successfully"
       });
     }
   );
