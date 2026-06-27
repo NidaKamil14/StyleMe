@@ -761,3 +761,43 @@ body::after {
 .save-note-btn:hover {
   transform: scale(1.03);
 }
+
+.login-container {
+  max-width: 400px;
+  margin: 60px auto;
+  padding: 35px;
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 8px 25px rgba(255, 182, 193, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.login-container h1 {
+  text-align: center;
+  color: #ff6fa5;
+  font-family: "Playfair Display", serif;
+}
+
+.login-container input {
+  padding: 12px;
+  border: 2px solid #ffd6e7;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+.login-container button {
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  background: #ff8fb8;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.login-container p {
+  text-align: center;
+  color: #ff6fa5;
+}

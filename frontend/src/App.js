@@ -14,7 +14,6 @@ import ethnicwearImg from "./assets/images/6.png";
 function App() {
   const [isWardrobeOpen, setIsWardrobeOpen] = useState(false);
   const [clothes, setClothes] = useState([]);
-  const [activePage, setActivePage] = useState("home");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Category");
 const [selectedColor, setSelectedColor] = useState("Color");
@@ -30,13 +29,24 @@ const [editingId, setEditingId] = useState(null);
 const [selectedClosetCategory, setSelectedClosetCategory] = useState(null);
 const [stylingNote, setStylingNote] = useState("");
 const [currentNote, setCurrentNote] = useState("");
+const [activePage, setActivePage] = useState("login");
+const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
+const [fullName, setFullName] = useState("");
+const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    fetch("http://localhost:5001/api/clothes")
-      .then((response) => response.json())
-      .then((data) => setClothes(data))
-      .catch((error) => console.log(error));
-  }, []);
+useEffect(() => {
+
+  const userId = localStorage.getItem("user_id");
+
+  fetch(
+    `http://localhost:5001/api/clothes?user_id=${userId}`
+  )
+    .then((response) => response.json())
+    .then((data) => setClothes(data))
+    .catch((error) => console.log(error));
+
+}, []);
 
   const filteredClothes = clothes.filter((item) => {
 
@@ -169,7 +179,7 @@ const addClothing = async () => {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          user_id: 1,
+          user_id: localStorage.getItem("user_id"),
           item_name: itemName,
           category: category,
           color: color,
@@ -300,6 +310,64 @@ const saveStylingNote = async (
     console.log(error);
   }
 };
+const handleSignup = async () => {
+  try {
+    const response = await axios.post(
+      "http://localhost:5001/api/auth/signup",
+      {
+        full_name: fullName,
+        email: email,
+        password: password,
+      }
+    );
+
+    setMessage(response.data.message);
+    console.log(response.data);
+
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const handleLogin = async () => {
+  try {
+    const response = await axios.post(
+      "http://localhost:5001/api/auth/login",
+      {
+        email: email,
+        password: password,
+      }
+    );
+
+    setMessage(response.data.message);
+
+    if (response.data.message === "Login successful!") {
+
+      localStorage.setItem(
+        "user_id",
+        response.data.user_id
+      );
+
+      setActivePage("home");
+    }
+
+    console.log(response.data);
+
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const handleLogout = () => {
+
+  localStorage.removeItem("user_id");
+
+  setEmail("");
+  setPassword("");
+  setMessage("");
+
+  setActivePage("login");
+};
 
   return (
   <div className="layout">
@@ -330,10 +398,6 @@ const saveStylingNote = async (
     My Wardrobe
   </div>
 
-  <div className="menu-item">
-    Outfits
-  </div>
-
  <div
   className={`menu-item ${
     activePage === "favorites" ? "active" : ""
@@ -346,12 +410,86 @@ const saveStylingNote = async (
   <div className="menu-item">
     Settings
   </div>
+  <div
+  className="menu-item"
+  onClick={handleLogout}
+>
+  Logout
+</div>
 
 </div>
 
     </aside>
 
    <main className="content">
+
+  {activePage === "login" && (
+  <div className="login-container">
+    <h1>Login</h1>
+
+    <input
+      type="email"
+      placeholder="Email"
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
+    />
+    
+    <input
+      type="password"
+      placeholder="Password"
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+    />
+    <button onClick={handleLogin}>
+      Login
+    </button>
+    {message && <p>{message}</p>}
+    <p
+      style={{ cursor: "pointer" }}
+      onClick={() => setActivePage("signup")}
+    >
+      Don't have an account? Sign Up
+    </p>
+  </div>
+)}
+
+  {activePage === "signup" && (
+  <div className="login-container">
+    <h1>Sign Up</h1>
+
+    <input
+      type="text"
+      placeholder="Full Name"
+      value={fullName}
+      onChange={(e) => setFullName(e.target.value)}
+    />
+    
+    <input
+      type="email"
+      placeholder="Email"
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
+    />
+    
+    <input
+      type="password"
+      placeholder="Password"
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+    />
+
+    <button onClick={handleSignup}>
+      Sign Up
+    </button>
+    {message && <p>{message}</p>}
+    <p
+      style={{ cursor: "pointer" }}
+      onClick={() => setActivePage("login")}
+    >
+      Already have an account? Login
+    </p>
+  </div>
+)}
 
   {activePage === "favorites" && (
   <>
