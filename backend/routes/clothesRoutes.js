@@ -5,20 +5,29 @@ const db = require("../config/db");
 // GET all clothes
 // GET all clothes
 router.get("/", (req, res) => {
-  console.log("GET /api/clothes hit");
 
-  const sql = "SELECT * FROM clothes";
+  const user_id = req.query.user_id;
 
-  db.query(sql, (err, result) => {
-    if (err) {
-      console.log(err);
-      return res.status(500).json({ error: "Database Error" });
+  const sql = `
+    SELECT *
+    FROM clothes
+    WHERE user_id = ?
+  `;
+
+  db.query(
+    sql,
+    [user_id],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({
+          error: "Database Error"
+        });
+      }
+
+      res.json(result);
     }
-
-    console.log("Query successful");
-
-    res.json(result);
-  });
+  );
 });
 
 // POST new clothing item
