@@ -60,8 +60,10 @@ router.post("/login", (req, res) => {
 }
 
 res.json({
-    message: "Login successful!",
-    user_id: user.user_id
+  message: "Login successful!",
+  user_id: user.user_id,
+  full_name: user.full_name,
+  email: user.email
 });
     }
   );

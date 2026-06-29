@@ -321,7 +321,8 @@ body {
   margin-bottom: 20px;
 }
 
-.add-clothing-card input {
+.add-clothing-card input,
+.add-clothing-card select {
   width: 100%;
   padding: 12px;
   margin-bottom: 12px;
@@ -800,4 +801,128 @@ body::after {
 .login-container p {
   text-align: center;
   color: #ff6fa5;
+}
+
+.settings-page{
+    max-width:900px;
+    margin:auto;
+}
+
+.settings-card{
+    background:white;
+    border-radius:22px;
+    padding:25px;
+    margin-top:25px;
+
+    border-top:5px solid #ff8db8;
+
+    box-shadow:0 10px 25px rgba(255,182,193,.18);
+}
+
+.settings-card:hover{
+    transform: translateY(-5px);
+
+    box-shadow: 0 15px 35px rgba(255, 182, 193, 0.28);
+}
+
+.settings-card h2{
+
+    font-size:24px;
+
+    color:#ff5d9e;
+
+    margin-bottom:20px;
+
+    font-weight:700;
+}
+
+.profile-row{
+    display:flex;
+    align-items:center;
+
+    gap:18px;
+
+    padding:16px 0;
+
+    border-bottom:1px solid #f8dce7;
+}
+
+.profile-row:last-child{
+    border-bottom:none;
+}
+
+.profile-icon{
+
+    width:58px;
+    height:58px;
+
+    border-radius:50%;
+
+    background:linear-gradient(
+        135deg,
+        #ffe5f1,
+        #ffd4e8
+    );
+
+    box-shadow:0 4px 10px rgba(255,182,193,.3);
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:24px;
+}
+
+.profile-label{
+
+    color:#999;
+
+    font-size:14px;
+
+    margin:0;
+}
+
+.profile-value{
+
+    margin-top:4px;
+
+    font-size:17px;
+
+    font-weight:600;
+
+    color:#444;
+}
+.logout-btn{
+    display:block;
+    margin:35px auto;
+
+    width:220px;
+
+    padding:14px;
+
+    border:none;
+    border-radius:30px;
+
+    background:#ff6fae;
+    color:white;
+
+    font-size:16px;
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.logout-btn:hover{
+    background:#ff4f96;
+    transform:translateY(-2px);
+}
+
+.add-clothing-card input::placeholder{
+    color:#8a8a8a;
+}
+
+.add-clothing-card select{
+    color:#555;
 }

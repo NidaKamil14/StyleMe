@@ -35,7 +35,7 @@ const [password, setPassword] = useState("");
 const [fullName, setFullName] = useState("");
 const [message, setMessage] = useState("");
 
-useEffect(() => {
+const fetchClothes = () => {
 
   const userId = localStorage.getItem("user_id");
 
@@ -45,7 +45,10 @@ useEffect(() => {
     .then((response) => response.json())
     .then((data) => setClothes(data))
     .catch((error) => console.log(error));
+};
 
+useEffect(() => {
+  fetchClothes();
 }, []);
 
   const filteredClothes = clothes.filter((item) => {
@@ -162,8 +165,11 @@ const addClothing = async () => {
     );
 
     alert("Clothing updated successfully!");
-
-    window.location.reload();
+    fetchClothes();
+    setItemName("");
+    setCategory("");
+    setColor("");
+    setOccasion("");
 
     return;
   } catch (error) {
@@ -190,11 +196,8 @@ const addClothing = async () => {
     );
 
     const data = await response.json();
-
-    alert("Clothing added successfully!");
-
-    window.location.reload();
-
+      alert("Clothing added successfully!");
+      fetchClothes();
   } catch (error) {
     console.log(error);
   }
@@ -343,13 +346,23 @@ const handleLogin = async () => {
 
     if (response.data.message === "Login successful!") {
 
-      localStorage.setItem(
-        "user_id",
-        response.data.user_id
-      );
+  localStorage.setItem(
+    "user_id",
+    response.data.user_id
+  );
 
-      setActivePage("home");
-    }
+  localStorage.setItem(
+    "full_name",
+    response.data.full_name
+  );
+
+  localStorage.setItem(
+    "email",
+    response.data.email
+  );
+
+  setActivePage("home");
+}
 
     console.log(response.data);
 
@@ -407,15 +420,14 @@ const handleLogout = () => {
   Favorites
 </div>
 
-  <div className="menu-item">
-    Settings
-  </div>
   <div
-  className="menu-item"
-  onClick={handleLogout}
->
-  Logout
-</div>
+    className={`menu-item ${
+    activePage === "settings" ? "active" : ""
+  }`}
+    onClick={() => setActivePage("settings")}
+    >
+      Settings
+  </div>
 
 </div>
 
@@ -536,10 +548,141 @@ const handleLogout = () => {
   </>
 )}
 
+{activePage === "settings" && (
+
+<div className="settings-page">
+
+<h1 className="title">
+    Settings
+</h1>
+
+<div className="settings-card">
+
+  <h2>💖 Profile</h2>
+
+  <div className="profile-info">
+
+    <div className="profile-row">
+      <span className="profile-icon">👤</span>
+
+      <div>
+        <p className="profile-label"> Name </p>
+        <p className="profile-value"> {localStorage.getItem("full_name")} </p>
+      </div>
+    </div>
+
+    <div className="profile-row">
+      <span className="profile-icon">📧</span>
+
+      <div>
+        <p className="profile-label"> Email </p>
+        <p className="profile-value"> {localStorage.getItem("email")} </p>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<div className="settings-card">
+
+  <h2>🌸 Appearance</h2>
+
+  <div className="profile-row">
+    <span className="profile-icon">🎀</span>
+
+    <div>
+      <p className="profile-label">Current Theme</p>
+      <p className="profile-value">
+        Pink Theme ✔
+      </p>
+    </div>
+  </div>
+
+  <div className="profile-row">
+    <span className="profile-icon">🌙</span>
+
+    <div>
+      <p className="profile-label">Dark Mode</p>
+      <p className="profile-value">
+        Coming Soon...
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<div className="settings-card">
+
+  <h2>👗 Wardrobe Statistics</h2>
+
+  <div className="profile-row">
+    <span className="profile-icon">👚</span>
+
+    <div>
+      <p className="profile-label">Total Clothes</p>
+      <p className="profile-value">
+        {clothes.length}
+      </p>
+    </div>
+  </div>
+
+  <div className="profile-row">
+    <span className="profile-icon">❤️</span>
+
+    <div>
+      <p className="profile-label">Favorite Pieces</p>
+      <p className="profile-value">
+        {favoriteItems.length}
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<div className="settings-card">
+
+  <h2>❤️ About StyleMe</h2>
+
+  <div className="profile-row">
+    <span className="profile-icon">💖</span>
+
+    <div>
+      <p className="profile-label">Version</p>
+      <p className="profile-value">
+        StyleMe 1.0
+      </p>
+    </div>
+  </div>
+
+  <div className="profile-row">
+    <span className="profile-icon">💻</span>
+
+    <div>
+      <p className="profile-label">Built With</p>
+      <p className="profile-value">
+        React • Node.js • MySQL
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<button
+  className="logout-btn"
+  onClick={handleLogout}
+>
+  🚪 Logout
+</button>
+
+</div>
+
+)}
+
   {activePage === "home" && (
     <>
   <h1 className="title">
-    Welcome Back, Nida
+    Welcome Back, {localStorage.getItem("full_name") || "Fashionista"} ✨
   </h1>
 
   <p className="subtitle">
@@ -847,12 +990,20 @@ gap: "6px"
     onChange={(e) => setItemName(e.target.value)}
   />
 
-  <input
-    type="text"
-    placeholder="Category"
-    value={category}
-    onChange={(e) => setCategory(e.target.value)}
-  />
+  <select
+  value={category}
+  onChange={(e) => setCategory(e.target.value)}
+>
+  <option value="">Choose Category</option>
+  <option value="Topwear">Topwear</option>
+  <option value="Bottomwear">Bottomwear</option>
+  <option value="Dress">Dress</option>
+  <option value="Ethnic Wear">Ethnic Wear</option>
+  <option value="Footwear">Footwear</option>
+  <option value="Accessory">Accessory</option>
+  <option value="Outerwear">Outerwear</option>
+  <option value="Other">Other</option>
+</select>
 
   <input
     type="text"
@@ -861,12 +1012,18 @@ gap: "6px"
     onChange={(e) => setColor(e.target.value)}
   />
 
-  <input
-    type="text"
-    placeholder="Occasion"
-    value={occasion}
-    onChange={(e) => setOccasion(e.target.value)}
-  />
+  <select
+  value={occasion}
+  onChange={(e) => setOccasion(e.target.value)}
+>
+  <option value="">Choose Occasion</option>
+  <option value="College">College</option>
+  <option value="Casual">Casual</option>
+  <option value="Party">Party</option>
+  <option value="Formal">Formal</option>
+  <option value="Festive">Festive</option>
+  <option value="Sports">Sports</option>
+</select>
 
   <button
     className="add-btn"
