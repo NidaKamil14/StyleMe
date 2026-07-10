@@ -85,7 +85,25 @@ StyleMe/
 
 ![Dashboard](screenshots/dashboard.png)
 
+### My Wardrobe
 
+![My Wardrobe](screenshots/wardrobe.png)
+
+### Favorites
+
+![Favorites](screenshots/favorites.png)
+
+### Settings
+
+![Settings](screenshots/settings.png)
+
+### Login
+
+![Login](screenshots/login.png)
+
+### Sign Up
+
+![Sign Up](screenshots/signup.png)
 
 ---
 
