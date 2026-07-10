@@ -1,99 +1,107 @@
-# StyleMe – Digital Wardrobe Planner
+# StyleMe 👗
 
-## Overview
+### Digital Wardrobe Planner
 
-StyleMe is a full-stack web application that helps users organize their wardrobe digitally, create outfits, and plan clothing combinations for different occasions.
+A full-stack wardrobe management web application that helps users organize their clothing, manage favorites, add personal styling notes, and discover outfit ideas based on weather and mood.
 
-The project allows users to manage clothes, categorize items, build outfits, and maintain a personalized wardrobe database.
-
----
-
-## Features
-
-* User Registration and Login
-* Digital Wardrobe Management
-* Add, Edit, and Delete Clothes
-* Categorize Clothes by Type and Occasion
-* Create and Manage Outfits
-* Outfit Item Mapping
-* Search and Filter Clothes
-* Personalized Wardrobe Organization
+Built with **React.js**, **Node.js**, **Express.js**, and **MySQL**, StyleMe provides each user with a secure, personalized digital wardrobe through authentication and user-specific data management.
 
 ---
 
-## Tech Stack
+## ✨ Overview
 
-### Frontend
-
-* React.js
-* Tailwind CSS
-
-### Backend
-
-* Node.js
-* Express.js
-
-### Database
-
-* MySQL
-
-### Authentication
-
-* JWT
-* bcryptjs
+Keeping track of clothes and planning outfits can be difficult, especially with a growing wardrobe. StyleMe simplifies wardrobe management by allowing users to store clothing items digitally, categorize them, search and filter their collection, mark favorite pieces, and keep styling notes for future reference.
+The application also includes a dashboard, style advisor, and personalized settings to provide a modern and user-friendly experience.
 
 ---
 
-## Database Tables
+## ✨ Features
 
-### Users
-
-Stores user information.
-
-### Clothes
-
-Stores clothing items uploaded by users.
-
-### Outfits
-
-Stores outfits created by users.
-
-### Outfit_Items
-
-Maps clothes to outfits.
+* User authentication (Sign Up & Login)
+* Personalized wardrobe for each user
+* Add, edit, and delete clothing items
+* Search and filter clothes
+* Mark favorite clothing items
+* Add styling notes
+* Dashboard with wardrobe statistics
+* Style Advisor based on weather and mood
+* Dynamic profile and settings page
 
 ---
 
-## Project Structure
+## 🛠 Tech Stack
 
+**Frontend**
+- React.js
+- CSS
+
+**Backend**
+- Node.js
+- Express.js
+
+**Database**
+- MySQL
+
+**Authentication**
+- JWT
+- bcryptjs
+
+**Tools**
+- Git
+- GitHub
+- Visual Studio Code
+
+---
+
+## 📁 Project Structure
+
+```text
 StyleMe/
+│
 ├── backend/
-│ ├── config/
-│ ├── controllers/
-│ ├── middleware/
-│ ├── models/
-│ ├── routes/
-│ └── server.js
+│   ├── auth/
+│   ├── config/
+│   ├── controllers/
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
+│   ├── .env
+│   ├── server.js
+│   └── package.json
 │
 ├── frontend/
+│   ├── public/
+│   ├── src/
+│   └── package.json
 │
 └── README.md
+```
 
 ---
 
-## Future Enhancements
+## 📸 Screenshots
 
-* AI Outfit Recommendations
-* Weather-Based Outfit Suggestions
-* Wardrobe Analytics Dashboard
-* Clothing Image Uploads
-* Fashion Trend Integration
+### Dashboard
+
+![Dashboard](screenshots/dashboard.png)
+
+
 
 ---
 
-## Author
+## 🚀 Future Enhancements
 
-Nida Kamil
+* AI-powered outfit recommendations
+* Clothing image upload support
+* Outfit planning calendar
+* Wardrobe analytics and insights
+* Personalized fashion trend recommendations
+
+---
+
+## 👩‍💻 Author
+
+**Nida Kamil**
 
 B.Tech Information Technology Student
-Pimpri Chinchwad College of Engineering
+Pimpri Chinchwad College of Engineering (PCCOE), Akurdi
